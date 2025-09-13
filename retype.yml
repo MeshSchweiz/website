@@ -4,9 +4,9 @@ output: .retype
 url: mesh-schweiz.ch # Use your website address here
 
 links:
-  - text: Visit meshtastic.org
+  - text: Forum
     icon: bath
-    link: https://meshtastic.org
+    link: https://forum.mesh-schweiz.ch
 
 start:
   # Uncomment the next line to try Retype Pro features
@@ -22,4 +22,4 @@ links:
     link: https://retype.com/guides/getting-started/
 
 footer:
-  copyright: "&copy; Copyright {{ year }}. All rights reserved."
+  copyright: "Kein Copyright - alle Inhalte frei verwendbar"

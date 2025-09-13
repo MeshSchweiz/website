@@ -10,6 +10,12 @@ Gemeinsam bauen wir ein offenes, frei verfügbares LoRa-Netz basierend auf Mesht
 
 [!ref Quick Start](quickstart.md){:target="\_blank"}
 
+Nutze das Mesh Schweiz Forum für den Austausch mit anderen 'Meshern':
+
+[!button target="blank" text="Forum" icon=":rocket:" iconAlign="right"](https://forum.mesh-schweiz.ch/)
+
+---
+
 ## Was ist Meshtastic?
 
 Meshtastic ist ein open source community Projekt für ein Mesh Netzwerk auf LoRa-Basis. Kleine billige Funksender verbinden
@@ -21,6 +27,8 @@ Die Kommunikation über längere Distanzen ist in der Deutschschweiz bereits heu
 Nachrichten von Thun bis Bern und umgekehrt gesendet werden.
 
 Mehr Infos findes du direkt bei [Meshtastic](https://meshtastic.org)
+
+---
 
 ## Wozu braucht es Mesh Schweiz?
 
