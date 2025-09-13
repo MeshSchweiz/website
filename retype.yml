@@ -1,0 +1,25 @@
+input: .
+output: .retype
+
+url: mesh-schweiz.ch # Use your website address here
+
+links:
+  - text: Visit meshtastic.org
+    icon: bath
+    link: https://meshtastic.org
+
+start:
+  # Uncomment the next line to try Retype Pro features
+  # pro: true
+
+branding:
+  label: Hub
+  logo: static/logo_light.png
+  logoDark: static/logo_dark.png
+
+links:
+  - text: Getting Started
+    link: https://retype.com/guides/getting-started/
+
+footer:
+  copyright: "&copy; Copyright {{ year }}. All rights reserved."
