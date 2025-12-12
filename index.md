@@ -5,7 +5,7 @@ order: 100
 
 # Mesh Schweiz
 
-Die Info und Community Plattform für das Mesh-Netz der **Deutschweiz**.
+Die Info und Community Plattform für das Mesh-Netz der **Schweiz**.
 Gemeinsam bauen wir ein offenes, frei verfügbares LoRa-Netz basierend auf Meshtastic. Mach auch mit :slightly_smiling_face:
 
 [!ref Quick Start](quickstart.md){:target="\_blank"}
@@ -23,8 +23,8 @@ sich mit der Meshtastic Software zu einem riesigen Netzwerk, welches je nach Anz
 Kilometer abdecken kann. In diesem Netzwerk können mit Mobiltelefon/PC via Bluetooth Verbindung zum Meshtastic Funksender
 Nachrichten ausgetauscht werden, ähnlich wie bei Whatsapp, Telegram, usw.
 
-Die Kommunikation über längere Distanzen ist in der Deutschschweiz bereits heute möglich. So können beispielsweise
-Nachrichten von Thun bis Bern und umgekehrt gesendet werden.
+Die Kommunikation über längere Distanzen ist in der Schweiz bereits heute möglich. So können beispielsweise
+Nachrichten von Thun bis Fribourg und umgekehrt gesendet werden.
 
 Mehr Infos findes du direkt bei [Meshtastic](https://meshtastic.org)
 
