@@ -16,12 +16,12 @@ Bitte folgende Einstellungen in der Meshtastic App (Webapp, iOS, Android) vorneh
 | Region                        | European Union 868MHz |
 | Preset                        | Medium Range - Fast   |
 | Override duty cycle           | OFF                   | ß   |
-| Number of hops                | 5                     |
+| Number of hops                | 3-5 (siehe Netiquette)                     |
 | Ignore MQTT                   | ON                    |
-| Node info broadcast intervall | 10800 Sekunden (3h)   |
-| Position broadcast interval   | 21600 Sekunden (6h)   |
-| Device metrics intervall      | 259200 Sekunden (72h) |
-| Sensor metrics intervall      | Alles auf OFF         |
+| Node info broadcast interval  | 3 Stunden  |
+| Position broadcast interval   | 6 Stunden bei Mobile-Nodes<br>24 Stunden bei Dach- und anderen statischen Nodes |
+| Environment metrics module enabled| Alles auf OFF falls keine Sensoren verbaut/verwendet|
+| Environment Metrics Update Interval| 12 Stunden |
 
 That's it, damit kannst du schon mal loslegen :grinning:
 

@@ -14,56 +14,136 @@ entlasten.
 
 ## Device
 ### Device Role
-||| `Device role` - Fall A:
-Ihr habt Zugang zum Mesh über einen benachbarten, gut gelegenen Node (z.B. auf einem Berggipfel):
-- stellt euren Node auf `Client_Mute`
-||| `Device role` - Fall B:
-Ihr habt selbst einen gut gelegenen Node, von dem andere profitieren, weil diese sonst keinen Zugang hätten:
-- stellt euren Node auf `Client`
 
-Solltet Ihr mehrere Nodes zuhause haben, stellt bitte gegebenenfalls nur den Haupt-Node auf `Client`, die
-anderen auf `Client_Mute`. der Node in eurem Auto, das bei euch vor dem Haus steht, sollte im Modus
-`Client_Mute` sein.
+Die Wahl der Node Rolle ist entscheidend für eine effiziente Funktion des Meshes, dabei ist zu erwähnen, das
+auch die Rolle CLIENT Nachrichten weiterleitet. Die Rolle CLIENT empfängt, sendet und wiederholt
+Nachrichten auf intelligente Weise, um das Mesh-Netzwerk optimal zu unterstützen. CLIENT ist ideal für
+Standorte, die anderen helfen können: Dachinstallationen, Standorte mit hoher Sichtbarkeit rundherum oder
+Knotenpunkte, die die Netzwerkabdeckung erweitern an einem Ort, wo es noch keine anderen CLIENT-Nodes
+oder ROUTER- und ROUTER_LATE Nodes hat. Quelle:
+https://meshtastic.org/docs/configuration/tips/#recommended-roles
 
-Router, Repeater **nur für Nodes** an topographisch sinnvollen Positionen wie Berggipfel oder Hochhäuser mit
-freier Sicht.
+#### CLIENT oder CLIENT_MUTE
 
-Das Mesh wird nicht besser nur weil zusätzliche Nodes dazukommen. Die Nodes benötigen auch die die
-passende Rollen und Positionen. Siehe: https://www.youtube.com/watch?v=htjwtnjQkkE
-|||
+Ihr startet euren Heim Node und habt innerhalb ein paar Stunden >50 Nodes in der Liste, dann ist das Mesh
+bei euch schon gut ausgebaut. Das ist an den meisten Stellen der Deutschschweiz und Romandie so,
+besonders Raum AG, ZH, ZG, SZ, SO, BE, GE.
+
+!!!
+Stellt euren Node an Orten mit hoher Node-Dichte auf CLIENT_MUTE
+!!!
+
+Wenn das Mesh bei euch noch nicht so dicht ist (GR, VS, TG), helft ihr mit Nachrichten weiterzuleiten in alle
+Richtungen, wenn der Node gut plaziert ist, zum Beispiel etwas höher auf dem Dach, auf einem hohen Turm
+oder auf einem Hügel, der in alle Richtungen sichtbar ist:
+
+!!!
+... stellt dort euren Node auf CLIENT
+!!!
+
+Solltet Ihr mehrere Nodes zuhause haben, stellt nur einen Node auf CLIENT: den, der mit einer sehr guten
+Antenne ausgestattet ist und wo Wände und andere Hindernisse die Ausbreitung in alle Richtungen nicht
+stören. Alle anderen Nodes, besonders auch Tracker-Nodes im Checkkartenformat, aber auch Nodes im
+Rucksack, am Fenster, in der Mitte der Wohnung, auf **CLIENT_MUTE** stellen. Auch der Node in eurem Auto,
+das bei euch vor dem Haus steht oder an vielen wechselnden Standorten umherfährt, sollte im Modus
+CLIENT_MUTE sein, dies gilt auch für alle Nodes, die ihr mobil mit euch herumtragt. Der Vorteil von
+CLIENT_MUTE ist, dass der Node nicht Nachrichten und Daten von anderen Nodes weiterleitet und den
+vielleicht letzten verbleibenden Hop eines anderen Pakets nicht herunterzählt.
+
+#### CLIENT_BASE
+Hintergrund (Englisch): https://github.com/meshtastic/firmware/issues/7863#issue-3385800923
+
+Falls ihr in eurer Wohnung durch viel Beton, oder Stahlfassaden schlechte Verbindungen habt, aber die
+Möglichkeit auf dem Hausdach einen Node zu setzen, so ist das, gerade in dicht bebauten Städten, eine gute
+Möglichkeit, dem Mesh zu helfen. Die optimale Rolle für solch einen **Node auf dem Dach** ist zunächst
+**CLIENT**.
+
+Dass ein Paket vom Wohnungs-Node nicht aus der Stadt herauskommt, ist bei uns in der Schweiz, nur schon
+allein wegen all den Hügel-Nodes mit Rolle CLIENT (intelligente Weiterleiter) und Nodes auf den Bergen mit
+Rolle ROUTER und ROUTER_LATE, die Nachrichten immer weiterleiten, egal, ob ein CLIENT in der Nähe sie
+bereits weitergeleitet hat, sehr selten der Fall. Probiert bei Dach-Nodes also zuerst CLIENT-Rolle aus. Nur,
+wenn sich dort Probleme ergeben mit der Erreichbarkeit von Kontakten im allgemeinen Kanal 0, nur dann,
+stellt den Dachnode auf Rolle CLIENT_BASE. Die Rolle CLIENT_BASE leitet Nachrichten, die er von Nodes bekommt, die auf CLIENT_BASE als Favorit markiert sind, im Router-Modus sehr aggressiv im sogenannten
+„early rebroadcast window“ weiter. Favoriten-Nodes erkennt man in der App am Sternchen * Symbol.
+Stellt also, wenn ihr die CLIENT_BASE benutzt, zuerst die Node DB auf Werkszustand zurück (Node DB
+Reset). Dann nur Euren eigenen Heim- bzw. Wohnungs-Node auf dem Dachnode als Favorit markieren,
+wirklich nur diesen, keinesfalls andere Nodes aus dem Mesh, bitte. Das ist auch wichtig, weil bei Nodes von
+Favoriten, es sei denn es ist der erste Node in der Annahme-Kette, die Hops-verbleibend nicht
+heruntergezählt werden.
+
+#### ROUTER/REPEATER
+Die Rolle REPEATER gibt es seit Firmware 2.7.13 nicht mehr, weil sie die ultra-agressive „early rebroadcast
+window“ ROUTER-Rolle mit Unsichtbarkeit für alle anderen Mesh-Teilnehmer verband.
+Die Rolle ROUTER wird in der Schweiz nicht mehr eingesetzt, mit unserer Topographie sind diese Rollen zu
+aggressiv und verursachen nur unnötige Hops.
+
+!!!tip Erklärung
+ROUTER antworten schneller als Nodes im CLIENT Modus. Hat es mehrere ROUTER auf
+Berggipfeln, die sich gegenseitig empfangen können, antwortet stets einer jener ROUTER zuerst. Die
+Nachricht springt sinnlos von ROUTER zu ROUTER. Dabei wird die Max-Hops Limite aufgebraucht und die
+Nachricht erreicht den gewünschten CLIENT / CLIENT_MUTE nie.
+!!!
+
+#### ROUTER_LATE
+Auf Berggipfeln und in langgezogenen Tälern, leitet diese Rolle Nachrichten am effektivsten zusätzlich nach
+den CLIENTs weiter.
+Ab Firmware 2.7.11 kann man ROUTER_LATE die sich gegenseitig sehen, gegenseitig in der Favoritenliste
+markieren (aber nur diese) und profitiert so von 0-cost-hops.
+
+!!!danger
+Das nicht-Herunterzählen von Hops (0-cost-hops) kann bei unserer hohen Bergnode-Dichte
+unerwartete Folgen von Paket-Kollisionen und nicht enden wollenden, wild umherirrenden, Paketen,
+haben. Daher empfehlen wir, auf jeden Fall sicherzustellen, dass auf Geräten mit Rolle ROUTER,
+ROUTER_LATE keine Nodes als Favoriten gesetzt sind. Das ist extrem wichtig. Prüft das mehrfach mit
+z.B. dem Node-Filter in Eurer App (via Favoriten Kriterium). Es dürfen bei ROUTER, ROUTER_LATE
+Infra-Nodes keine Favoriten, keine Sternchen * bei Nodes, sein.
+Hintergrund (Englisch) ab Punkt «Behavior» https://github.com/meshtastic/firmware/pull/7992
+!!!
+
+Wenn viele ROUTER_LATE (übrigens auch ROUTER) in einem Gebiet 80x80km eingesetzt werden (z.b
+Zentralschweiz), kann es vorkommen, das Nachrichten mehrmals weitergeleitet werden, da ROUTER_LATE
+und auch ROUTER im Gegensatz zum intelligenten CLIENT nicht schaut, ob das Paket schonmal durch
+andere Nodes in Funkreichweite weiterversendet wurde. Das führt dann, man kann es in der z.B. Android-App
+Benachtigungsleiste oben sehen bei den Details, zu über 50% RX Dupes (RX Dupe / RX Total *100). In
+diesem Fall macht es Sinn, einige Nodes in der Region „nur“ als, ja sehr intelligenter, CLIENT zu betreiben,
+weil sonst die Nachrichten-De-Duplikation der Nodes überlastet wird aufgrund zu wenig History-Speicher
+(RAM), aber auch, weil ein und dieselbe Nachricht mehrfach umherschwirrend in einem dichten Mesh
+ungünstig ist.
 
 ### Node Info
 | <!-- -->    | <!-- -->    |
 |-------------|-------------|
-| `NodeInfo broadcast interval`         | 10800 Sekunden (3h)        |
+| `NodeInfo broadcast interval`| 3 Stunden (wird seit Firmware 2.7 in  Stunden angegeben)        |
 
-!!! Was steckt in den NodeInfo-Aussendungen ?
+!!!tip Was steckt in den NodeInfo-Aussendungen?
 - Long- und Short-Name
 - Node-Typ (z.B. LILYGO_TBEAM, HELTEC usw.)
 - Rolle (z.B. Client_Mute, Router usw.)
+- Public Key für Direktnachrichten
 !!!
 
-Die Standard Einstellung ist 3h (10'800 Sekunden).
+Die Standard Einstellung ist 3h (3 Stunden).
 Unsere Smartphones merken sich in der Nodeliste diese Information für jeden. Es ist darum nicht nötig weniger als 3h in den
-Settings einzustellen.
+Settings einzustellen. **Sven fox 71 sendet NodeInfo bei seinen stationären Nodes und Bergnodes sogar nur alle 12h /
+12 Stunden**.
 
 ### Rebroadcast
 | <!-- -->    | <!-- -->    |
 |-------------|-------------|
-| `Rebroadcast mode`         | ALL|
+| `Rebroadcast mode`| ALL |
 
-In der Schweiz/EU gilt eine gesetzliche Grenze von 10% Sendezeit pro Stunde und Gerät. Sollte die “Airtime” eurer Node
-zu hoch sein, es also knapp werden mit den 10% Sendezeit, könnt ihr versuchsweise den “Rebroadcast Mode” auf “Local
-only” stellen. Dadurch werden von eurer Node nur noch Nachrichten weitergegeben, die eurem Primary oder Sekundary
-Kanal entsprechen.
+In der Schweiz/EU gilt eine gesetzliche Grenze von 10% Sendezeit pro Stunde und Gerät. Sollte die “Airtime” eurer Nodes
+zu hoch sein, also unter Protokolle – Funkauslastung (Logs – Device Metrics) es also knapp werden mit den 10% Sendezeit
+(ChUtil > 30%, AirUtilTX >5%), könnt ihr versuchsweise den “Rebroadcast Mode” auf **LOCAL_ONLY** stellen. Dadurch
+werden von eurem Node nur noch Nachrichten weitergegeben, die eurem Primary 0 Kanal und Direktnachrichten entsprechen.
 
 ## Position
 | <!-- -->    | <!-- -->    |
 |-------------|-------------|
-| `Broadcast intervall`         | 21600 Sekunden (6h)|
-| `Smart position`         | OFF |
+| `Broadcast intervall`         | 6h (6 Stunden)|
+| `Smart position`         | Disabled (Schieberegler nacht links) |
 
-!!! Was steckt in den Positions-Aussendungen?
+!!!tip Was steckt in den Positions-Aussendungen?
 - Länge- und Breiten-Angabe und falls gewählt auch die:
 - Höhe,
 - Uhrzeit,
@@ -71,30 +151,30 @@ Kanal entsprechen.
 - Geschwindigkeit über Grund
 !!!
 
-Unsere Empfehlung ist die Position nur alle 6h (21'600 Sekunden) auszusenden.
-
+Unsere Empfehlung ist die Position bei mobilen Nodes nur alle 6h (Six Hours) auszusenden.
 Natürlich könnt Ihr auch mal eine andere Zeit einstellen, wenn ihr unterwegs seid, am Wandern oder Bergfunken. Wenn ihr
 aber euren Node fix montiert habt, dann sind 6h ausreichend. Unsere Smartphones merken sich ja auf der Karte wo jeder ist.
 
-!!!danger 
-Bitte **schaltet unbedingt die «Smart-Position» Funktion aus**. Ansonsten sendet euer Node alle 2-3 Minuten eure
-Position und müllt das ganze Mesh zu.
-!!!
+**Bitte schaltet „Smart Position“ bei euren Home-Nodes unbedingt aus!** Nodes mit eigenem GPS und schlechtem GPS-
+Signal, wie auch Home_Nodes, die das GPS Signal von eurem Mobilphone beziehen, können alle paar Minuten die Position
+
+aussenden und damit das Mesh unnötig belasten. Das sieht dann so aus, viele kleine, minimale Positionsänderungen, die
+ausgesendet werden. Selbst bei mobilen Nodes lieber Smart Position ausschalten, dafür alle 3h oder 6h übertragen. Und bei
+festen Bergnodes langt sogar alle 24h.
 
 ## Telemetrie
 ### Device Metrics
 | <!-- -->    | <!-- -->    |
 |-------------|-------------|
-| `Device Metrics Interval`         | 259200 Sekunden (72h)* |
+| `Send Device Telemetry`         | Disabled (Schieberegler nach links). |
+| `Device Metrics Update Interval`         | 72h (72 Stunden). Android-User: lasst den Wert nicht auf 0 stehen. Sonst wird der Standard-Intervall von 30min benutzt.|
 
--> Android-User: lasst den Wert nicht auf 0 stehen. Sonst wird der Standard-Intervall von 30min benutzt.
-
-!!! Was steckt in den DeviceTelemetrie-Aussendungen ?
+!!!tip Was steckt in den DeviceTelemetrie-Aussendungen ?
 - Uhrzeit
 - Batterie-Spannung
-- „Channel_Utilization“: wie sehr der Kanal bei euch belegt ist (in %)
-- „Air_Util_Tx“: wie oft euer Node sendet (in %)
-- „Uptime_Seconds“: Wie lange ihr schon online seid
+- „Channel_Utilization“: wie sehr der Kanal bei euch belegt ist (in %). Alles über 30% ist nicht gut.
+- „Air_Util_Tx“: wie oft euer Node sendet (in %). Alles über 5% ist nicht gut.
+- „Uptime_Seconds“: Wie lange ihr schon online seid zwischen Reboots bzw. Neustarts Node
 !!!
 
 Diese Information kann interessant sein, wenn ihr einen Remote Node (z.B. irgendwo auf dem Berg) betreibt und den
@@ -102,17 +182,21 @@ Zustand überwachen wollt.
 
 !!!danger
 Steht aber der Node bei euch zuhause auf dem Fensterbrett, liegt im Auto, oder er steckt in eurer Tasche, dann ist
-es recht sinnbefreit diese Information ständig ins Netz zu senden. Ihr seht ja euren Batterielevel mittels Bluetooth
-oder WLAN auf eurem Smartphone. Die anderen User im Mesh interessieren sich sicher recht wenig für den Ladezustand
-eures Nodes.
+es recht nutzlos für den Rest der Mesh-Teilnehmer, diese Information ständig ins Netz zu senden. Ihr seht ja z.B. euren
+Batterielevel, auch allfällige Sensodaten, mittels Bluetooth oder WLAN auf eurem Smartphone.
 !!!
 
-Unsere Empfehlung ist daher die DeviceTelemetrie auf das Maximum einzustellen: 72h (= 259'200 Sekunden)
+Unsere Empfehlung ist daher die DeviceTelemetrie auf das Maximum einzustellen: 72h (= 259'200 Sekunden oder allgemein
+Geräte-Telemetrie Senden / Send Device Telemetry ganz auszustellen..
+Gut ab Firmware 2.7: wenn Send Device Telemetrie Disabled / ausgestellt ist, dann werden keine Telemetrie-,Umweltdaten /
+Environment Telemetry, Energiedaten / Power Metrics rausgesendet. Dies, weil diese Metriken alle zum Modul Telemetrie
+gehören.
 
-### Sensor Metrics
+### Einvironment Metrics
 | <!-- -->    | <!-- -->    |
 |-------------|-------------|
-| `Sensor Metrics Interval`         | Alles auf OFF |
+| `Einvironment Metrics Module enabled` | Disabled (Schieberegler nach links), falls keine Sensoren verbaut oder nicht von Interesse für andere im Mesh|
+| `Environment Metrics Update Interval` | 12h (12 Stunden)|
 
 !!! Was steckt in den EnvironmentTelemetrie-Aussendungen ?
 - Uhrzeit
@@ -120,38 +204,42 @@ Unsere Empfehlung ist daher die DeviceTelemetrie auf das Maximum einzustellen: 7
 !!!
 
 Das kann spannend sein, falls richtig gemacht und nicht ständig ausgesandt.
-Falls keine Sensoren verbaut, stellt im App alle Sensoren auf «OFF»
-
--> Falls ihr Sensoren verbaut habt, stellt die Intervall-Zeit bitte möglichst lange ein z.B. 3'600 Sekunden (1h)
+Falls keine Sensoren verbaut, stellt im App alle Sensoren auf «OFF». Modul Umweltdaten aktiviert / Environment metrics
+module enabled: disabled (Schieberegler nach links)
 
 ### Power Metrics
 | <!-- -->    | <!-- -->    |
 |-------------|-------------|
-| `Sensor Metrics Interval`         |  OFF |
+| `Power Metrics Module enabled`         |  Disabled (Schieberegler nach links), falls keine externen Batteriemanagement-Systeme (BMS) verbaut und am I2C-Bus mit Kabel angeschlossen. Ebenfalls aus, falls nicht von Interesse für andere im Mesh, sondern nur lokal. |
+| `Power Metrics Update Interval`         |  12h (12 Stunden) |
 
-!!! Was steckt in den PowerTelemetrie-Aussendungen ?
-- Strom und Spannungswerte
+!!!tip Was steckt in den PowerTelemetrie-Aussendungen?
+Strom und Spannungswerte (Das hat nichts mit dem Batterie-Level eures Nodes zu tun. Hierbei handelt es sich um externe Sensoren zur Strom- und Spannung-Messung, zum Beispiel mit einer Batterie verbundene, eigene Battery Management Systeme / Laderegler.)
 !!!
-
-Das hat nichts mit dem Batterie-Level eurer Node zu tun.
-Hierbei handelt es sich um externe Sensoren zur Strom- und Spannung-Messung.
 
 ## Lora
 | <!-- -->    | <!-- -->    |
 |-------------|-------------|
-| `Hop limit`         |  **5** <br> Die Mesh Struktur ist nicht für die Größe des Netzes ausgelegt, die wir mittlerweile haben. Darum sollte das Hop limit nicht über 5 liegen.|
-| `Override Duty Cycle` | **disabled** <br> In der Schweiz/EU gilt eine gesetzliche Grenze von 10% Sendezeit pro Stunde und Gerät |
-| `Ignore MQTT` | **ON** (Das heisst: das „Ignorieren“ ist aktiviert) <br> MQTT nur für spezifische Anwendungen verwenden und Upload zu LongFast **unbedingt ausschalten**.|
+| `Number of Hops`| Das ist das Limit von jedem selbst versandten Paket vom eigenen Node (eigene Nachrichten, eigene NodeInfo, Sensordaten, Positionsdaten). Jeder Node, der danach die Pakete weiterleitet, zählt jeweils einen Hop runter von diesem Anfangs-Hop-Count. Wenn auf 0, wird das Paket nicht mehr weitergeleitet von anderen Nodes. Das ist eine ganz zentrale Sicherheitsmassnahme in Meshtastic. **Ideal sind 3 oder 4 hops, maximal 5 hops** (für Nodes ohne direkten Zugang zu Berg-Nodes).<br><br>Die Mesh Struktur ist nicht für die Grösse des Netzes ausgelegt, die wir mittlerweile haben. Darum sollte das Hop Limit keinesfalls über 5 liegen. Man kommt über 4-5 Zwischen-Stationen / Hops (Berg-Nodes) mittlerweile sehr gut bis in die Westschweiz / Romandie bzw. umgekehrt von der Romandie in die Deutschschweiz. Alle Hops über 5 überlasten das Mesh und sind kontraproduktiv.|
+| `Override Duty Cycle` | Disabled (Schieber nach links)<br><br>In der Schweiz/EU gilt eine gesetzliche Grenze von 10% Sendezeit pro Stunde und Gerät auf den ISM-Bändern EU_433 und EU_868. Bei User / Benutzer nicht auf EU_868 „HAM User / Amateurfunk lizenziert“ aktivieren (Schieber also nach links lassen). EU_868 ist kein Amateurfunkband und HAM Mode führt zu duty cycle override Aktivierung, was auf EU_868 illegal ist. HAM User können aber natürlich trotzdem auf EU_868 ihren Benutzer long name / langen Namen auf ihre Funkamateur-Kennung einstellen als Identifizierung.|
+| `Ignore MQTT` | Enabled (Das heisst: das „Ignorieren“ ist aktiviert, Schieber nach rechts)<br<br>MQTT ignorieren heisst, dass der eigene Node keine MQTT-Pakete, die über Internet-Gateways ins Netz kamen, weiterleitet an andere Nodes. MQTT nur für spezifische Anwendungen verwenden und Upload zu MediumFast **unbedingt ausschalten**. Das heisst, bei Channel 0 / Kanal 0 MQTT Uplink und Downlink aktiviert unbedingt aus lassen (Schieber nach Links). Wir empfehlen auch bei sekundären und privaten Channels kein MQTT Downlink.|
+| `OK to MQTT` | Disabled (Schieber nach links)<br><br>Wenn diese Option aktiviert ist, signalisiert diese Konfiguration, dass der Benutzer der Übertragung seiner Pakete an MQTT-Broker im Internet zustimmt. Meshmap funktioniert auch ohne diese Option zu aktivieren.|
 
 ## Firmware
-!!!danger
+!!!warning
 Bitte aktualisiert eure Firmware regelmässig
 !!!
 
-Das geht mit dem Web-Flasher wirklich kinderleicht und ist in 3 Minuten erledigt.
-Die Software wird stetig weiterentwickelt und die Mesh Struktur dadurch immer effizienter !
+Das geht mit dem Web-Flasher mit Chrome-Browser https://flasher.meshtastic.org/ über USB-Kabel wirklich kinderleicht
+und ist in 3 Minuten erledigt. Die Software wird stetig weiterentwickelt und die Mesh Struktur dadurch immer effizienter!
+Wir empfehlen, immer nur beta-Versionen zu nutzen, da diese stabiler und ausgereifter sind als alpha-Versionen.
 
-→ Den Web-Flasher findet ihr hier: https://meshtastic.org/docs/getting-started/flashing-firmware/esp32/web-flasher/
+**Stand 7 Dez 2025:** Firmware 2.7.15. Fox 71 Sven hatte beim Upgrade seinen RAK Gerätes und seines Seeed Studio Solar
+Node P1 keine Probleme beim Update von der alten Version 2.6.11 auf 2.7.15.
+
+Bald wird man auch über die Smartphone-App und Bluetooth einfach drahtlos updaten können. Auf Android: App 2.7.8 bei
+Einstellungen – Advanced / Fortgeschritten – Firmware Update. Wir empfehlen das Stand Dezember 2025 aber noch nicht
+für das Update von Firmware 2.6.11 auf 2.7.15.
 
 
 ## Fragen?
@@ -160,10 +248,11 @@ Bei Fragen wendet Euch bitte an:
 - Forum Mesh Schweiz: https://forum.mesh-schweiz.ch
 - Meshtastic Schweiz Facebook Gruppe: https://www.facebook.com/groups/771317178261325/
 - GitHub Meshtastic Schweiz: https://github.com/orgs/meshtastic/discussions/24
+- Facebook Suisse Romande: https://www.facebook.com/groups/1478480786437095
 
 ## Netiquette Autoren
 !!! Disclaimer
-Die Netiquette wurde **nicht** durch Mesh Schweiz verfasst, sondern durch verschiedene versierte Personen. Hier der [Link](https://drive.google.com/file/d/14Wd3UXRfnrliED6sUjJXb7UYsQ3iZCbp/edit) zum Origial der Netiquette.
+Die Netiquette wurde **nicht** durch Mesh Schweiz verfasst, sondern durch verschiedene versierte Personen. Hier der [Link](https://drive.google.com/file/d/1lZHCaG0E1VB8CA-Mr_hOGU2Ahnl5qfQF/view) zum Origial der Netiquette.
 !!!
 
 
